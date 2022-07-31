@@ -31,3 +31,7 @@ addNewUserToDatabaseAsync({ name: 'Dan', password: 'chickennuggets' })
     // Will catch any promise rejections or thrown errors in the chain!
     console.log('Oops, caught an error: ', err.message);
   });
+
+module.exports = {
+  addNewUserToDatabaseAsync: addNewUserToDatabaseAsync
+};
