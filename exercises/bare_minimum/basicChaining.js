@@ -16,11 +16,15 @@ var laterModule = require('./promisification.js');
 
 
 var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
+  var promiseWrite = Promise.promisify(fs.writeFile);
   var user = earlierModule.pluckFirstLineFromFileAsync(readFilePath);
   return user
-    .then(laterModule.getGitHubProfileAsync(user))
-    .then(fs.writeFileSync(writeFilePath, JSON.stringify(user)));
-
+    .then(function (newUser) {
+      return laterModule.getGitHubProfileAsync(newUser);
+    })
+    .then(function (writeUser) {
+      return promiseWrite(writeFilePath, JSON.stringify(writeUser));//promisify fs.writefile look up
+    });// write out functionality/return statements
 };
 
 // Export these functions so we can test them
